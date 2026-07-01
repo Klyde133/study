@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyHub — Interactive Study Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app" id="app">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+        </div>
+        <span class="brand-text">StudyHub</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-section="dashboard">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Dashboard
+        </button>
+        <button class="nav-item" data-section="prompts">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Study Prompts
+        </button>
+        <button class="nav-item" data-section="flashcards">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+          Flashcards
+        </button>
+        <button class="nav-item" data-section="ai">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          AI Tutor
+          <span class="nav-status" id="aiNavStatus"></span>
+        </button>
+        <button class="nav-item" data-section="tools">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          Subject Tools
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="backup-actions">
+          <button class="backup-btn backup-save" id="saveBackupBtn" title="Save or rename your backup file">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Save Backup
+          </button>
+          <p class="sidebar-save-hint" id="linkedFileHint">Ctrl+S to quick-save</p>
+          <button class="backup-btn backup-load" id="loadBackupBtn" title="Restore data from a backup file">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Load Backup
+          </button>
+        </div>
+        <input type="file" id="backupFileInput" accept=".json,application/json" hidden>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+          <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <span id="themeLabel">Dark Mode</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Mobile header -->
+    <header class="mobile-header">
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <span class="mobile-title">StudyHub</span>
+      <button class="theme-toggle mobile-theme" id="themeToggleMobile" aria-label="Toggle dark mode">
+        <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/></svg>
+        <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </header>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Main content -->
+    <main class="main-content">
+
+      <!-- ========== DASHBOARD ========== -->
+      <section class="section active" id="dashboard">
+        <header class="section-header">
+          <div>
+            <h1>Dashboard</h1>
+            <p class="section-subtitle">Your all-in-one study workspace</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-secondary" id="saveAllBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              Save All Data
+            </button>
+            <div class="header-date" id="currentDate"></div>
+          </div>
+        </header>
+
+        <div class="dashboard-grid">
+          <!-- Pomodoro -->
+          <div class="card card-pomodoro">
+            <div class="card-header">
+              <h2>Pomodoro Timer</h2>
+              <span class="badge" id="pomodoroPhase">Focus</span>
+            </div>
+            <div class="pomodoro-display">
+              <svg class="pomodoro-ring" viewBox="0 0 120 120">
+                <circle class="ring-bg" cx="60" cy="60" r="54"/>
+                <circle class="ring-progress" id="pomodoroRing" cx="60" cy="60" r="54"/>
+              </svg>
+              <div class="pomodoro-time" id="pomodoroTime">25:00</div>
+            </div>
+            <div class="pomodoro-controls">
+              <button class="btn btn-primary" id="pomodoroStart">Start</button>
+              <button class="btn btn-secondary" id="pomodoroReset">Reset</button>
+            </div>
+            <div class="pomodoro-stats">
+              <span>Session <strong id="pomodoroCount">0</strong></span>
+              <span>Mode: <strong id="pomodoroModeLabel">25 min focus</strong></span>
+            </div>
+          </div>
+
+          <!-- Todo List -->
+          <div class="card card-todo">
+            <div class="card-header">
+              <h2>Tasks</h2>
+              <span class="badge badge-muted" id="todoCount">0 tasks</span>
+            </div>
+            <form class="todo-form" id="todoForm">
+              <input type="text" id="todoInput" placeholder="Add a new task..." autocomplete="off">
+              <button type="submit" class="btn btn-primary btn-icon" aria-label="Add task">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </form>
+            <ul class="todo-list" id="todoList"></ul>
+          </div>
+
+          <!-- Quick Notes -->
+          <div class="card card-notes">
+            <div class="card-header">
+              <h2>Quick Notes</h2>
+              <span class="save-indicator" id="notesSaveStatus">Saved</span>
+            </div>
+            <textarea id="quickNotes" placeholder="Jot down ideas, formulas, or reminders..."></textarea>
+          </div>
+
+          <!-- Progress Tracker -->
+          <div class="card card-progress">
+            <div class="card-header">
+              <h2>Study Progress</h2>
+              <span class="badge" id="progressPercent">0%</span>
+            </div>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <form class="progress-form" id="progressForm">
+              <input type="text" id="progressInput" placeholder="Add study goal..." autocomplete="off">
+              <button type="submit" class="btn btn-primary btn-sm">Add</button>
+            </form>
+            <ul class="progress-list" id="progressList"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== STUDY PROMPTS ========== -->
+      <section class="section" id="prompts">
+        <header class="section-header">
+          <div>
+            <h1>Study Prompt Generator</h1>
+            <p class="section-subtitle">Random questions from your custom topic pools</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-secondary" id="focusModeBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              Focus Mode
+            </button>
+            <button class="btn btn-secondary" id="exportBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export
+            </button>
+          </div>
+        </header>
+
+        <div class="prompts-layout">
+          <div class="card card-topics">
+            <h2>Topic Pools</h2>
+            <form class="topic-form" id="topicForm">
+              <input type="text" id="topicName" placeholder="Topic name (e.g. Biology)" autocomplete="off">
+              <textarea id="topicQuestions" placeholder="One question per line..." rows="4"></textarea>
+              <button type="submit" class="btn btn-primary btn-full">Add Topic Pool</button>
+            </form>
+            <ul class="topic-list" id="topicList"></ul>
+          </div>
+
+          <div class="card card-generator">
+            <div class="generator-display" id="generatorDisplay">
+              <div class="generator-placeholder">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                <p>Add topics and click Generate to start studying</p>
+              </div>
+            </div>
+            <div class="generator-meta" id="generatorMeta"></div>
+            <div class="generator-controls">
+              <select id="topicSelect" class="select-input">
+                <option value="all">All Topics</option>
+              </select>
+              <button class="btn btn-primary btn-lg" id="generateBtn">Generate Question</button>
+              <button class="btn btn-secondary" id="markDoneBtn" disabled>Mark Answered</button>
+            </div>
+          </div>
+
+          <div class="card card-history">
+            <h2>Session History</h2>
+            <ul class="history-list" id="historyList"></ul>
+            <button class="btn btn-secondary btn-sm btn-full" id="clearHistoryBtn">Clear History</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== FLASHCARDS ========== -->
+      <section class="section" id="flashcards">
+        <header class="section-header">
+          <div>
+            <h1>Flashcard Quiz</h1>
+            <p class="section-subtitle">Create decks, flip cards, and track your score</p>
+          </div>
+          <div class="flash-kbd-hints" id="flashKbdHints" hidden>
+            <kbd>Space</kbd> flip · <kbd>←</kbd><kbd>→</kbd> navigate
+          </div>
+        </header>
+
+        <div class="flashcards-layout">
+          <div class="card deck-panel">
+            <div class="card-header">
+              <h2>My Decks</h2>
+              <button class="btn btn-primary btn-sm" id="newDeckBtn">+ New</button>
+            </div>
+            <ul class="deck-list" id="deckList"></ul>
+            <div class="deck-io">
+              <button class="btn btn-secondary btn-sm btn-full" id="importDeckBtn">Import Deck</button>
+              <button class="btn btn-secondary btn-sm btn-full" id="exportDeckBtn" disabled>Export Deck</button>
+              <input type="file" id="deckFileInput" accept=".json,application/json" hidden>
+            </div>
+          </div>
+
+          <div class="flash-main">
+            <!-- Empty state -->
+            <div class="card flash-empty" id="flashEmpty">
+              <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.35"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+              <p>Select a deck or create a new one to get started</p>
+            </div>
+
+            <!-- Deck editor -->
+            <div class="card flash-editor" id="flashEditor" hidden>
+              <div class="card-header">
+                <input type="text" class="deck-name-input" id="deckNameInput" placeholder="Deck name">
+                <div class="editor-actions">
+                  <button class="btn btn-secondary btn-sm" id="deleteDeckBtn">Delete Deck</button>
+                  <button class="btn btn-primary btn-sm" id="startStudyBtn">Start Quiz</button>
+                </div>
+              </div>
+              <form class="card-add-form" id="cardAddForm">
+                <input type="text" id="cardFrontInput" placeholder="Front (question)" autocomplete="off">
+                <input type="text" id="cardBackInput" placeholder="Back (answer)" autocomplete="off">
+                <button type="submit" class="btn btn-primary btn-sm">Add Card</button>
+              </form>
+              <ul class="card-edit-list" id="cardEditList"></ul>
+            </div>
+
+            <!-- Study mode -->
+            <div class="flash-study" id="flashStudy" hidden>
+              <div class="study-toolbar">
+                <button class="btn btn-secondary btn-sm" id="exitStudyBtn">← Back to Editor</button>
+                <div class="study-options">
+                  <label class="shuffle-toggle">
+                    <input type="checkbox" id="shuffleToggle">
+                    Shuffle
+                  </label>
+                  <button class="btn btn-secondary btn-sm" id="restartStudyBtn">Restart</button>
+                </div>
+              </div>
+
+              <div class="study-scorebar">
+                <div class="score-item score-correct">Correct: <strong id="scoreCorrect">0</strong></div>
+                <div class="score-item score-wrong">Missed: <strong id="scoreWrong">0</strong></div>
+                <div class="score-item">Progress: <strong id="studyProgress">0/0</strong></div>
+              </div>
+
+              <div class="flashcard-scene" id="flashcardScene">
+                <div class="flashcard" id="flashcard">
+                  <div class="flashcard-face flashcard-front">
+                    <span class="face-label">Question</span>
+                    <p id="cardFrontText"></p>
+                  </div>
+                  <div class="flashcard-face flashcard-back">
+                    <span class="face-label">Answer</span>
+                    <p id="cardBackText"></p>
+                  </div>
+                </div>
+              </div>
+              <p class="flip-hint">Click the card or press <kbd>Space</kbd> to flip</p>
+
+              <div class="study-nav">
+                <button class="btn btn-secondary" id="prevCardBtn">← Previous</button>
+                <div class="study-grade" id="studyGrade" hidden>
+                  <button class="btn btn-grade btn-wrong" id="markWrongBtn">Missed</button>
+                  <button class="btn btn-grade btn-correct" id="markCorrectBtn">Got it</button>
+                </div>
+                <button class="btn btn-secondary" id="nextCardBtn">Next →</button>
+              </div>
+
+              <div class="study-complete card" id="studyComplete" hidden>
+                <h2>Quiz Complete!</h2>
+                <p id="studyCompleteSummary"></p>
+                <button class="btn btn-primary" id="studyAgainBtn">Study Again</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== AI TUTOR ========== -->
+      <section class="section" id="ai">
+        <header class="section-header">
+          <div>
+            <h1>AI Study Tutor</h1>
+            <p class="section-subtitle">Powered by ChatGPT — ask questions, get explanations, and study smarter</p>
+          </div>
+          <div class="header-actions">
+            <span class="ai-status-badge" id="aiStatusBadge">Checking...</span>
+            <button class="btn btn-secondary btn-sm" id="clearChatBtn">Clear Chat</button>
+          </div>
+        </header>
+
+        <div class="ai-layout card">
+          <div class="ai-setup-banner" id="aiSetupBanner" hidden>
+            <strong>AI needs setup to work online.</strong>
+            <p>Run the server with <code>npm start</code> and add your OpenAI API key to a <code>.env</code> file. See instructions below.</p>
+            <details class="ai-setup-details">
+              <summary>How to set up</summary>
+              <ol>
+                <li>Get an API key from <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">platform.openai.com</a></li>
+                <li>Copy <code>.env.example</code> to <code>.env</code> and paste your key</li>
+                <li>Run <code>npm install</code> then <code>npm start</code></li>
+                <li>Open <code>http://localhost:3000</code></li>
+              </ol>
+            </details>
+          </div>
+
+          <div class="ai-quick-prompts" id="aiQuickPrompts">
+            <button type="button" class="ai-chip" data-prompt="Explain photosynthesis in simple terms with an analogy.">Explain a topic</button>
+            <button type="button" class="ai-chip" data-prompt="Quiz me with 5 questions about World War 2. Wait for my answers one at a time.">Quiz me</button>
+            <button type="button" class="ai-chip" data-prompt="Give me a 7-day study plan for preparing for a math exam.">Study plan</button>
+            <button type="button" class="ai-chip" data-prompt="Help me understand the difference between mitosis and meiosis using a table.">Compare concepts</button>
+          </div>
+
+          <div class="ai-messages" id="aiMessages">
+            <div class="ai-welcome">
+              <div class="ai-avatar">AI</div>
+              <div class="ai-bubble ai-bubble-assistant">
+                <p>Hi! I'm your StudyHub AI tutor. Ask me to explain topics, create quizzes, summarize notes, or help you study any subject.</p>
+              </div>
+            </div>
+          </div>
+
+          <form class="ai-input-row" id="aiChatForm">
+            <textarea id="aiChatInput" rows="1" placeholder="Ask anything about your studies..." autocomplete="off"></textarea>
+            <button type="submit" class="btn btn-primary ai-send-btn" id="aiSendBtn" aria-label="Send message">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- ========== SUBJECT TOOLS ========== -->
+      <section class="section" id="tools">
+        <header class="section-header">
+          <div>
+            <h1>Subject Tools</h1>
+            <p class="section-subtitle">Specialized calculators and study aids</p>
+          </div>
+        </header>
+
+        <div class="tool-tabs">
+          <button class="tool-tab active" data-tool="math">Math Solver</button>
+          <button class="tool-tab" data-tool="regex">Regex Tester</button>
+          <button class="tool-tab" data-tool="vocab">Vocabulary</button>
+          <button class="tool-tab" data-tool="science">Unit Converter</button>
+        </div>
+
+        <!-- Math Solver -->
+        <div class="tool-panel active" id="tool-math">
+          <div class="card">
+            <h2>Step-by-Step Equation Solver</h2>
+            <p class="tool-desc">Solve linear equations in the form ax + b = c</p>
+            <div class="math-input-row">
+              <input type="text" id="mathEquation" placeholder="e.g. 2x + 5 = 13" class="input-lg">
+              <button class="btn btn-primary" id="mathSolveBtn">Solve</button>
+            </div>
+            <div class="math-steps" id="mathSteps"></div>
+          </div>
+        </div>
+
+        <!-- Regex Tester -->
+        <div class="tool-panel" id="tool-regex">
+          <div class="card">
+            <h2>Regex Tester</h2>
+            <p class="tool-desc">Test regular expressions against sample text</p>
+            <div class="regex-inputs">
+              <div class="input-group">
+                <label for="regexPattern">Pattern</label>
+                <input type="text" id="regexPattern" placeholder="/pattern/flags" class="input-mono">
+              </div>
+              <div class="input-group">
+                <label for="regexText">Test String</label>
+                <textarea id="regexText" rows="6" placeholder="Enter text to test against..." class="input-mono"></textarea>
+              </div>
+            </div>
+            <div class="regex-results">
+              <div class="regex-matches" id="regexMatches"></div>
+              <div class="regex-highlight" id="regexHighlight"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vocabulary Matcher -->
+        <div class="tool-panel" id="tool-vocab">
+          <div class="card">
+            <h2>Vocabulary Matcher</h2>
+            <p class="tool-desc">Match words to their definitions — add pairs below or use defaults</p>
+            <form class="vocab-form" id="vocabForm">
+              <input type="text" id="vocabWord" placeholder="Word">
+              <input type="text" id="vocabDef" placeholder="Definition">
+              <button type="submit" class="btn btn-primary btn-sm">Add</button>
+            </form>
+            <div class="vocab-game" id="vocabGame">
+              <div class="vocab-score">Score: <strong id="vocabScore">0</strong> / <span id="vocabTotal">0</span></div>
+              <div class="vocab-columns">
+                <ul class="vocab-col" id="vocabWords"></ul>
+                <ul class="vocab-col" id="vocabDefs"></ul>
+              </div>
+              <button class="btn btn-primary" id="vocabStartBtn">Start Drill</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Unit Converter -->
+        <div class="tool-panel" id="tool-science">
+          <div class="card science-layout">
+            <div class="converter-main">
+              <h2>Unit Converter</h2>
+              <div class="converter-row">
+                <input type="number" id="convertValue" value="1" step="any">
+                <select id="convertFrom"></select>
+                <span class="convert-arrow">→</span>
+                <select id="convertTo"></select>
+                <output id="convertResult" class="convert-result">—</output>
+              </div>
+              <div class="converter-category">
+                <label>Category</label>
+                <select id="convertCategory">
+                  <option value="length">Length</option>
+                  <option value="mass">Mass</option>
+                  <option value="temperature">Temperature</option>
+                  <option value="energy">Energy</option>
+                </select>
+              </div>
+            </div>
+            <div class="formula-ref">
+              <h3>Formula Reference</h3>
+              <div id="formulaContent"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Focus Mode Overlay -->
+  <div class="focus-overlay" id="focusOverlay">
+    <div class="focus-content">
+      <button class="focus-exit" id="focusExitBtn" aria-label="Exit focus mode">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="focus-question" id="focusQuestion"></div>
+      <div class="focus-controls">
+        <button class="btn btn-primary btn-lg" id="focusGenerateBtn">Next Question</button>
+        <button class="btn btn-secondary" id="focusMarkBtn">Mark Answered</button>
+      </div>
+      <div class="focus-timer" id="focusTimer"></div>
+    </div>
+  </div>
+
+  <!-- Save Modal -->
+  <div class="modal-overlay" id="saveModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-labelledby="saveModalTitle">
+      <h2 id="saveModalTitle">Save Backup</h2>
+      <p class="modal-desc">Choose a name for your backup file. Next time you save, it will update the same file.</p>
+      <div class="input-group">
+        <label for="saveFileName">File name</label>
+        <div class="filename-row">
+          <input type="text" id="saveFileName" placeholder="my-study-backup" autocomplete="off">
+          <span class="filename-ext">.json</span>
+        </div>
+      </div>
+      <p class="save-linked" id="saveLinkedHint"></p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="saveModalCancel">Cancel</button>
+        <button class="btn btn-secondary" id="saveModalAs">Save As New...</button>
+        <button class="btn btn-primary" id="saveModalConfirm">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
