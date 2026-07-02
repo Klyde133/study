@@ -4,8 +4,13 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
+
+// Gemini uses GOOGLE_API_KEY, fallback to old name for compatibility
+const API_KEY = process.env.GOOGLE_API_KEY || process.env.OPENAI_API_KEY;
+const MODEL = process.env.GEMINI_MODEL || process.env.OPENAI_MODEL || 'gemini-2.5-flash';
+
+// Gemini's OpenAI-compatible endpoint
+const API_URL = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions';
 
 app.use(express.json({ limit: '1mb' }));
 app.use(express.static(path.join(__dirname)));
@@ -18,15 +23,15 @@ If asked about something unrelated to learning or studying, gently redirect back
 app.get('/api/health', (_req, res) => {
   res.json({
     ok: true,
-    ai: Boolean(OPENAI_API_KEY),
-    model: OPENAI_MODEL
+    ai: Boolean(API_KEY),
+    model: MODEL
   });
 });
 
 app.post('/api/chat', async (req, res) => {
-  if (!OPENAI_API_KEY) {
+  if (!API_KEY) {
     return res.status(503).json({
-      error: 'AI is not configured. Add your OPENAI_API_KEY to the .env file on the server.'
+      error: 'AI is not configured. Add your GOOGLE_API_KEY to the .env file on the server.'
     });
   }
 
@@ -45,14 +50,14 @@ app.post('/api/chat', async (req, res) => {
   }
 
   try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch(API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${OPENAI_API_KEY}`
+        Authorization: `Bearer ${API_KEY}`
       },
       body: JSON.stringify({
-        model: OPENAI_MODEL,
+        model: MODEL,
         messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...safeMessages],
         max_tokens: 1024,
         temperature: 0.7
@@ -62,7 +67,7 @@ app.post('/api/chat', async (req, res) => {
     const data = await response.json();
 
     if (!response.ok) {
-      const msg = data.error?.message || 'OpenAI request failed';
+      const msg = data.error?.message || 'AI request failed';
       return res.status(response.status).json({ error: msg });
     }
 
@@ -72,8 +77,9 @@ app.post('/api/chat', async (req, res) => {
     }
 
     res.json({ message: reply });
+
   } catch (err) {
-    res.status(500).json({ error: 'Could not reach OpenAI. Check your internet connection.' });
+    res.status(500).json({ error: 'Could not reach AI service. Check your internet connection.' });
   }
 });
 
@@ -83,5 +89,5 @@ app.get('*', (_req, res) => {
 
 app.listen(PORT, () => {
   console.log(`StudyHub running at http://localhost:${PORT}`);
-  console.log(OPENAI_API_KEY ? `AI enabled (${OPENAI_MODEL})` : 'AI disabled — set OPENAI_API_KEY in .env');
+  console.log(API_KEY ? `AI enabled (${MODEL})` : 'AI disabled — set GOOGLE_API_KEY in .env');
 });
