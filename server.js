@@ -5,7 +5,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Gemini uses GOOGLE_API_KEY, fallback to old name for compatibility
+// Support both new and old env var names
 const API_KEY = process.env.GOOGLE_API_KEY || process.env.OPENAI_API_KEY;
 const MODEL = process.env.GEMINI_MODEL || process.env.OPENAI_MODEL || 'gemini-2.5-flash';
 
@@ -30,8 +30,9 @@ app.get('/api/health', (_req, res) => {
 
 app.post('/api/chat', async (req, res) => {
   if (!API_KEY) {
+    console.error('❌ Missing API key. Set GOOGLE_API_KEY in environment.');
     return res.status(503).json({
-      error: 'AI is not configured. Add your GOOGLE_API_KEY to the .env file on the server.'
+      error: 'AI is not configured. Add your GOOGLE_API_KEY to the .env file.'
     });
   }
 
@@ -50,6 +51,8 @@ app.post('/api/chat', async (req, res) => {
   }
 
   try {
+    console.log(`🚀 Sending request to Gemini... Model: ${MODEL}`);
+
     const response = await fetch(API_URL, {
       method: 'POST',
       headers: {
@@ -67,18 +70,22 @@ app.post('/api/chat', async (req, res) => {
     const data = await response.json();
 
     if (!response.ok) {
-      const msg = data.error?.message || 'AI request failed';
+      console.error('❌ Gemini API error:', data);
+      const msg = data.error?.message || `AI request failed (${response.status})`;
       return res.status(response.status).json({ error: msg });
     }
 
     const reply = data.choices?.[0]?.message?.content;
     if (!reply) {
+      console.error('❌ No reply in response:', data);
       return res.status(502).json({ error: 'No response from AI.' });
     }
 
+    console.log('✅ Got reply from Gemini');
     res.json({ message: reply });
 
   } catch (err) {
+    console.error('❌ Network error:', err.message);
     res.status(500).json({ error: 'Could not reach AI service. Check your internet connection.' });
   }
 });
@@ -89,5 +96,5 @@ app.get('*', (_req, res) => {
 
 app.listen(PORT, () => {
   console.log(`StudyHub running at http://localhost:${PORT}`);
-  console.log(API_KEY ? `AI enabled (${MODEL})` : 'AI disabled — set GOOGLE_API_KEY in .env');
+  console.log(API_KEY ? `✅ AI enabled (${MODEL})` : '⚠️ AI disabled — set GOOGLE_API_KEY');
 });
