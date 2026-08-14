@@ -3,24 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>StudyHub — Interactive Study Dashboard</title>
+  <title>BTLed StudyHub — Home Economics & Modern Math</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="btled.css">
 </head>
 <body>
+  <div class="btled-loader" id="btledLoader">
+    <div class="loader-brand">
+      <h1>BTLed StudyHub</h1>
+      <p>Home Economics · Modern Math · Universal Tools</p>
+    </div>
+    <div class="loader-orbit">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><line x1="7" y1="2" x2="7" y2="22"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20M12 2v20"/></svg>
+    </div>
+    <p class="loader-text">Preparing your study tools...</p>
+  </div>
+
   <div class="app" id="app">
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-brand">
-        <div class="brand-icon">
+        <div class="brand-icon btled">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
           </svg>
         </div>
-        <span class="brand-text">StudyHub</span>
+        <span class="brand-text">BTLed StudyHub</span>
       </div>
 
       <nav class="sidebar-nav">
@@ -28,6 +41,24 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
           Dashboard
         </button>
+        <p class="nav-group-label">BTLed Core</p>
+        <button class="nav-item" data-section="schedule">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Class Schedule
+        </button>
+        <button class="nav-item" data-section="he-tools">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+          HE Tools
+        </button>
+        <button class="nav-item" data-section="math-tools">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
+          Math Tools
+        </button>
+        <button class="nav-item" data-section="universal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2"/></svg>
+          Universal Tools
+        </button>
+        <p class="nav-group-label">Study</p>
         <button class="nav-item" data-section="prompts">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
           Study Prompts
@@ -41,10 +72,6 @@
           AI Tutor
           <span class="nav-status" id="aiNavStatus"></span>
         </button>
-        <button class="nav-item" data-section="tools">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-          Subject Tools
-        </button>
       </nav>
 
       <div class="sidebar-footer">
@@ -57,6 +84,10 @@
           <button class="backup-btn backup-load" id="loadBackupBtn" title="Restore data from a backup file">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             Load Backup
+          </button>
+          <button class="backup-btn backup-load" id="exportDataBtn" title="Export as PDF or document">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Export PDF / Doc
           </button>
         </div>
         <input type="file" id="backupFileInput" accept=".json,application/json" hidden>
@@ -73,7 +104,7 @@
       <button class="menu-btn" id="menuBtn" aria-label="Open menu">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
-      <span class="mobile-title">StudyHub</span>
+      <span class="mobile-title">BTLed StudyHub</span>
       <button class="theme-toggle mobile-theme" id="themeToggleMobile" aria-label="Toggle dark mode">
         <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/></svg>
         <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -90,9 +121,10 @@
         <header class="section-header">
           <div>
             <h1>Dashboard</h1>
-            <p class="section-subtitle">Your all-in-one study workspace</p>
+            <p class="section-subtitle">BTLed study workspace — auto-saves everything</p>
           </div>
           <div class="header-actions">
+            <span class="autosave-indicator" id="autosaveIndicator">✓ Saved</span>
             <button class="btn btn-secondary" id="saveAllBtn">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
               Save All Data
@@ -377,104 +409,273 @@
         </div>
       </section>
 
-      <!-- ========== SUBJECT TOOLS ========== -->
-      <section class="section" id="tools">
+      <!-- ========== CLASS SCHEDULE ========== -->
+      <section class="section" id="schedule">
         <header class="section-header">
           <div>
-            <h1>Subject Tools</h1>
-            <p class="section-subtitle">Specialized calculators and study aids</p>
+            <h1>BTLed Class Schedule</h1>
+            <p class="section-subtitle">Build, edit, and export your weekly timetable</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-secondary" id="loadDemoSchedule">Load BTLed Demo</button>
+            <button class="btn btn-secondary" id="exportSchedulePdf">Export PDF</button>
+            <button class="btn btn-secondary" id="exportScheduleDoc">Export Doc</button>
           </div>
         </header>
-
-        <div class="tool-tabs">
-          <button class="tool-tab active" data-tool="math">Math Solver</button>
-          <button class="tool-tab" data-tool="regex">Regex Tester</button>
-          <button class="tool-tab" data-tool="vocab">Vocabulary</button>
-          <button class="tool-tab" data-tool="science">Unit Converter</button>
+        <div class="schedule-layout">
+          <div class="card schedule-form">
+            <h2>Add / Edit Class</h2>
+            <form id="scheduleForm">
+              <div class="form-row"><label>Subject Name</label><input id="schedName" placeholder="Food & Nutrition"></div>
+              <div class="form-row"><label>Subject Code</label><input id="schedCode" placeholder="TLE-HE 101"></div>
+              <div class="form-row"><label>Room / Lab</label><input id="schedRoom" placeholder="HE Kitchen Lab"></div>
+              <div class="form-row time-row">
+                <div><label>Start</label><input type="time" id="schedStart"></div>
+                <div><label>End</label><input type="time" id="schedEnd"></div>
+              </div>
+              <div class="form-row"><label>Days</label>
+                <div class="day-picker">
+                  <button type="button" class="day-btn" data-day="Mon">M</button>
+                  <button type="button" class="day-btn" data-day="Tue">T</button>
+                  <button type="button" class="day-btn" data-day="Wed">W</button>
+                  <button type="button" class="day-btn" data-day="Thu">T</button>
+                  <button type="button" class="day-btn" data-day="Fri">F</button>
+                </div>
+              </div>
+              <div class="form-row"><label>Color Tag</label>
+                <div class="color-picker">
+                  <button type="button" class="color-swatch" data-color="#f97316" style="background:#f97316"></button>
+                  <button type="button" class="color-swatch" data-color="#6366f1" style="background:#6366f1"></button>
+                  <button type="button" class="color-swatch" data-color="#10b981" style="background:#10b981"></button>
+                  <button type="button" class="color-swatch" data-color="#ec4899" style="background:#ec4899"></button>
+                  <button type="button" class="color-swatch" data-color="#8b5cf6" style="background:#8b5cf6"></button>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary btn-full" id="scheduleSubmitBtn">Add Class</button>
+              <button type="button" class="btn btn-secondary btn-full" id="clearScheduleForm">Clear Form</button>
+            </form>
+          </div>
+          <div>
+            <div class="timetable-grid" id="timetableGrid"></div>
+            <div class="subject-list-bar card" id="subjectListBar"></div>
+          </div>
         </div>
+      </section>
 
-        <!-- Math Solver -->
-        <div class="tool-panel active" id="tool-math">
-          <div class="card">
-            <h2>Step-by-Step Equation Solver</h2>
-            <p class="tool-desc">Solve linear equations in the form ax + b = c</p>
+      <!-- ========== HE TOOLS ========== -->
+      <section class="section" id="he-tools">
+        <header class="section-header">
+          <div><h1>Home Economics Tools</h1><p class="section-subtitle">Major subject — recipes, nutrition, sewing, budgeting</p></div>
+        </header>
+        <div data-btled-tabs="he">
+          <div class="btled-tabs">
+            <button class="btled-tab active" data-panel="he-recipe">Recipe Calculator</button>
+            <button class="btled-tab" data-panel="he-nutrition">Nutrition (PH)</button>
+            <button class="btled-tab" data-panel="he-fabric">Fabric & Pattern</button>
+            <button class="btled-tab" data-panel="he-menu">Menu Planner</button>
+            <button class="btled-tab" data-panel="he-budget">Family Budget</button>
+            <button class="btled-tab" data-panel="he-sewing">Sewing Guide</button>
+          </div>
+          <div class="btled-panel active card" id="he-recipe">
+            <h2>Recipe Calculator & Scaler</h2>
+            <div class="tool-grid-2" style="margin-bottom:1rem">
+              <div><label>Original servings</label><input type="number" id="origServings" value="4"></div>
+              <div><label>Target servings</label><input type="number" id="targetServings" value="8"></div>
+            </div>
+            <div id="recipeList"></div>
+            <button class="btn btn-secondary btn-sm" id="addIngredient">+ Ingredient</button>
+            <button class="btn btn-primary" id="scaleRecipe">Scale Recipe</button>
+            <div class="tool-grid-3" style="margin-top:1rem">
+              <input type="number" id="unitConvertVal" value="1" step="any">
+              <select id="unitConvertFrom"><option>cup</option><option>tbsp</option><option>tsp</option><option>ml</option><option>g</option></select>
+              <button class="btn btn-secondary btn-sm" id="convertUnits">Convert Units</button>
+            </div>
+            <div class="result-box he" id="recipeResult"></div>
+            <div class="result-box he" id="unitConvertResult"></div>
+          </div>
+          <div class="btled-panel card" id="he-nutrition">
+            <h2>Nutrition Facts — Philippine Foods</h2>
+            <p class="tool-desc">Pinggang Pinoy meal planning with local dishes</p>
+            <div class="food-grid" id="foodGrid"></div>
+            <div id="nutritionDetail" class="result-box he"></div>
+          </div>
+          <div class="btled-panel card" id="he-fabric">
+            <h2>Fabric & Pattern Calculator</h2>
+            <div class="tool-grid-2">
+              <div><label>Fabric width (inches)</label><input type="number" id="fabricWidth" value="45"></div>
+              <div><label>Length needed (inches)</label><input type="number" id="fabricLength" value="72"></div>
+              <div><label>Pattern repeat (inches)</label><input type="number" id="patternRepeat" value="0"></div>
+              <div><label>Price per yard (₱)</label><input type="number" id="fabricPrice" value="150"></div>
+            </div>
+            <div class="result-box he" id="fabricResult"></div>
+          </div>
+          <div class="btled-panel card" id="he-menu">
+            <h2>Weekly Menu Planner</h2>
+            <div class="menu-grid" id="menuGrid"></div>
+            <button class="btn btn-primary" id="genShoppingList">Generate Shopping List (₱ PHP)</button>
+            <ul class="shopping-list" id="shoppingList"></ul>
+            <div style="margin-top:1rem;display:flex;gap:0.5rem">
+              <button class="btn btn-secondary btn-sm" id="exportMenuPdf">Export PDF</button>
+              <button class="btn btn-secondary btn-sm" id="exportMenuDoc">Export Doc</button>
+            </div>
+          </div>
+          <div class="btled-panel card" id="he-budget">
+            <h2>Family Budget Simulator</h2>
+            <label>Monthly Income (₱)</label><input type="number" id="budgetIncome" value="25000">
+            <div id="budgetList" style="margin:1rem 0"></div>
+            <button class="btn btn-secondary btn-sm" id="addBudgetItem">+ Expense</button>
+            <button class="btn btn-secondary btn-sm" id="loadBudgetScenario">Load Student Scenario</button>
+            <div class="result-box he" id="budgetResult"></div>
+          </div>
+          <div class="btled-panel card" id="he-sewing">
+            <h2>Sewing Techniques Guide</h2>
+            <div class="stitch-grid" id="stitchGrid"></div>
+            <div class="stitch-detail" id="stitchDetail">Click a stitch to see settings and troubleshooting tips.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== MATH TOOLS ========== -->
+      <section class="section" id="math-tools">
+        <header class="section-header">
+          <div><h1>Modern Math Tools</h1><p class="section-subtitle">Minor subject — measurement, statistics, geometry, formulas</p></div>
+        </header>
+        <div data-btled-tabs="math">
+          <div class="btled-tabs">
+            <button class="btled-tab active" data-panel="math-measure">Measurement Pro</button>
+            <button class="btled-tab" data-panel="math-equation">Equation Solver</button>
+            <button class="btled-tab" data-panel="math-stats">Statistics</button>
+            <button class="btled-tab" data-panel="math-interest">Interest & Loans</button>
+            <button class="btled-tab" data-panel="math-geometry">Geometry</button>
+            <button class="btled-tab" data-panel="math-flash">Math Flashcards</button>
+          </div>
+          <div class="btled-panel active card" id="math-measure">
+            <h2>Measurement Converter Pro</h2>
+            <select id="measureCat"><option value="metric">Metric</option><option value="imperial">Imperial</option><option value="filipino">Filipino Market</option></select>
+            <div class="converter-row" style="margin-top:1rem">
+              <input type="number" id="measureVal" value="1"><select id="measureFrom"></select>
+              <span>→</span><select id="measureTo"></select>
+              <output id="measureResult" class="convert-result"></output>
+            </div>
+          </div>
+          <div class="btled-panel card" id="math-equation">
+            <h2>Equation & Formula Solver</h2>
             <div class="math-input-row">
               <input type="text" id="mathEquation" placeholder="e.g. 2x + 5 = 13" class="input-lg">
               <button class="btn btn-primary" id="mathSolveBtn">Solve</button>
             </div>
             <div class="math-steps" id="mathSteps"></div>
           </div>
-        </div>
-
-        <!-- Regex Tester -->
-        <div class="tool-panel" id="tool-regex">
-          <div class="card">
-            <h2>Regex Tester</h2>
-            <p class="tool-desc">Test regular expressions against sample text</p>
-            <div class="regex-inputs">
-              <div class="input-group">
-                <label for="regexPattern">Pattern</label>
-                <input type="text" id="regexPattern" placeholder="/pattern/flags" class="input-mono">
-              </div>
-              <div class="input-group">
-                <label for="regexText">Test String</label>
-                <textarea id="regexText" rows="6" placeholder="Enter text to test against..." class="input-mono"></textarea>
-              </div>
+          <div class="btled-panel card" id="math-stats">
+            <h2>Statistics Calculator</h2>
+            <textarea id="statsInput" rows="3" placeholder="Enter numbers separated by commas..."></textarea>
+            <button class="btn btn-primary btn-sm" id="calcStats">Calculate</button>
+            <div class="result-box math" id="statsResult"></div>
+            <div class="stats-chart" id="statsChart"></div>
+          </div>
+          <div class="btled-panel card" id="math-interest">
+            <h2>Interest & Loan Calculator</h2>
+            <div class="tool-grid-2">
+              <div><label>Principal (₱)</label><input type="number" id="loanPrincipal" value="10000"></div>
+              <div><label>Annual Rate (%)</label><input type="number" id="loanRate" value="12"></div>
+              <div><label>Months</label><input type="number" id="loanMonths" value="12"></div>
+              <div><label>Type</label><select id="loanType"><option value="compound">Compound</option><option value="simple">Simple</option></select></div>
             </div>
-            <div class="regex-results">
-              <div class="regex-matches" id="regexMatches"></div>
-              <div class="regex-highlight" id="regexHighlight"></div>
+            <button class="btn btn-primary" id="calcInterest">Calculate</button>
+            <div class="result-box math" id="interestResult"></div>
+          </div>
+          <div class="btled-panel card" id="math-geometry">
+            <h2>Geometry Visualizer</h2>
+            <select id="geoShape"><option value="rect">Rectangle</option><option value="circle">Circle</option><option value="triangle">Triangle</option></select>
+            <div class="tool-grid-2" style="margin:1rem 0">
+              <div><label>Dimension A</label><input type="number" id="geoA" value="10"></div>
+              <div><label>Dimension B</label><input type="number" id="geoB" value="6"></div>
+            </div>
+            <div class="geometry-canvas-wrap"><canvas id="geometryCanvas" width="400" height="300"></canvas></div>
+            <div class="result-box math" id="geoResult"></div>
+          </div>
+          <div class="btled-panel card" id="math-flash">
+            <h2>Math Flashcards — Spaced Repetition</h2>
+            <div class="card" style="text-align:center;padding:2rem">
+              <p id="mathFlashQ" style="font-size:1.25rem;font-weight:600"></p>
+              <p id="mathFlashA" hidden style="margin-top:1rem;color:var(--accent)"></p>
+            </div>
+            <div style="display:flex;gap:0.5rem;justify-content:center;margin-top:1rem">
+              <button class="btn btn-secondary" id="mathFlashFlip">Show Answer</button>
+              <button class="btn btn-grade btn-wrong" id="mathFlashHard">Hard</button>
+              <button class="btn btn-grade btn-correct" id="mathFlashEasy">Easy</button>
             </div>
           </div>
         </div>
+      </section>
 
-        <!-- Vocabulary Matcher -->
-        <div class="tool-panel" id="tool-vocab">
-          <div class="card">
-            <h2>Vocabulary Matcher</h2>
-            <p class="tool-desc">Match words to their definitions — add pairs below or use defaults</p>
-            <form class="vocab-form" id="vocabForm">
-              <input type="text" id="vocabWord" placeholder="Word">
-              <input type="text" id="vocabDef" placeholder="Definition">
-              <button type="submit" class="btn btn-primary btn-sm">Add</button>
-            </form>
-            <div class="vocab-game" id="vocabGame">
-              <div class="vocab-score">Score: <strong id="vocabScore">0</strong> / <span id="vocabTotal">0</span></div>
-              <div class="vocab-columns">
-                <ul class="vocab-col" id="vocabWords"></ul>
-                <ul class="vocab-col" id="vocabDefs"></ul>
-              </div>
-              <button class="btn btn-primary" id="vocabStartBtn">Start Drill</button>
-            </div>
+      <!-- ========== UNIVERSAL TOOLS ========== -->
+      <section class="section" id="universal">
+        <header class="section-header">
+          <div><h1>Universal Tools</h1><p class="section-subtitle">GPA, scheduling, notes, quizzes, and BTLed resources</p></div>
+        </header>
+        <div data-btled-tabs="uni">
+          <div class="btled-tabs">
+            <button class="btled-tab active" data-panel="uni-pomodoro">Themed Pomodoro</button>
+            <button class="btled-tab" data-panel="uni-gpa">GPA Tracker</button>
+            <button class="btled-tab" data-panel="uni-scheduler">Study Scheduler</button>
+            <button class="btled-tab" data-panel="uni-notes">Note Templates</button>
+            <button class="btled-tab" data-panel="uni-quiz">Quiz Generator</button>
+            <button class="btled-tab" data-panel="uni-resources">BTLed Library</button>
           </div>
-        </div>
-
-        <!-- Unit Converter -->
-        <div class="tool-panel" id="tool-science">
-          <div class="card science-layout">
-            <div class="converter-main">
-              <h2>Unit Converter</h2>
-              <div class="converter-row">
-                <input type="number" id="convertValue" value="1" step="any">
-                <select id="convertFrom"></select>
-                <span class="convert-arrow">→</span>
-                <select id="convertTo"></select>
-                <output id="convertResult" class="convert-result">—</output>
-              </div>
-              <div class="converter-category">
-                <label>Category</label>
-                <select id="convertCategory">
-                  <option value="length">Length</option>
-                  <option value="mass">Mass</option>
-                  <option value="temperature">Temperature</option>
-                  <option value="energy">Energy</option>
-                </select>
-              </div>
+          <div class="btled-panel active card" id="uni-pomodoro">
+            <h2>Subject-Themed Pomodoro</h2>
+            <div class="pomodoro-themes">
+              <button class="theme-chip" data-theme="default">Default</button>
+              <button class="theme-chip kitchen" data-theme="kitchen">Kitchen Mode</button>
+              <button class="theme-chip sewing" data-theme="sewing">Sewing Mode</button>
+              <button class="theme-chip math" data-theme="math">Math Mode</button>
             </div>
-            <div class="formula-ref">
-              <h3>Formula Reference</h3>
-              <div id="formulaContent"></div>
+            <p class="tool-desc">Theme applies to your Dashboard Pomodoro timer. Kitchen & Sewing modes use ambient study vibes.</p>
+          </div>
+          <div class="btled-panel card" id="uni-gpa">
+            <h2>Grade & GPA Tracker (GWA)</h2>
+            <table class="gpa-table"><thead><tr><th>Subject</th><th>Units</th><th>Grade</th><th></th></tr></thead><tbody id="gpaBody"></tbody></table>
+            <button class="btn btn-secondary btn-sm" id="addGpaRow">+ Subject</button>
+            <div class="result-box" id="gpaResult"></div>
+            <h3 style="margin-top:1.5rem">Final Grade Predictor</h3>
+            <div class="tool-grid-3">
+              <div><label>Current Grade</label><input type="number" step="0.01" id="currentGrade" value="85"></div>
+              <div><label>Target Grade</label><input type="number" step="0.01" id="targetGrade" value="90"></div>
+              <div><label>Final Weight %</label><input type="number" id="finalWeight" value="40"></div>
             </div>
+            <button class="btn btn-primary btn-sm" id="calcFinalGrade">What do I need?</button>
+            <div class="result-box" id="gpaPredict"></div>
+          </div>
+          <div class="btled-panel card" id="uni-scheduler">
+            <h2>Smart Study Scheduler</h2>
+            <div class="tool-grid-2">
+              <div><label>Major (HE) hours/day</label><input type="range" id="schedMajor" min="0" max="8" value="4"></div>
+              <div><label>Minor (Math) hours/day</label><input type="range" id="schedMinor" min="0" max="8" value="3"></div>
+              <div><label>Review hours/day</label><input type="range" id="schedReview" min="0" max="8" value="2"></div>
+              <div><label>Break hours/day</label><input type="range" id="schedBreak" min="0" max="4" value="1"></div>
+            </div>
+            <div class="result-box" id="schedulerResult"></div>
+          </div>
+          <div class="btled-panel card" id="uni-notes">
+            <h2>Structured Note Templates</h2>
+            <div class="note-template-tabs">
+              <button class="btn btn-secondary btn-sm note-tpl-btn active" data-tpl="cornell">Cornell Notes</button>
+              <button class="btn btn-secondary btn-sm note-tpl-btn" data-tpl="recipe">Recipe Card</button>
+              <button class="btn btn-secondary btn-sm note-tpl-btn" data-tpl="math">Math Problem</button>
+            </div>
+            <textarea class="note-template-area" id="noteTemplateArea"></textarea>
+          </div>
+          <div class="btled-panel card" id="uni-quiz">
+            <h2>Auto Quiz Generator</h2>
+            <textarea id="quizSourceText" rows="6" placeholder="Paste your notes here to generate quiz questions..."></textarea>
+            <button class="btn btn-primary" id="genQuizFromNotes">Generate Quiz</button>
+            <div id="quizOutput" style="margin-top:1rem"></div>
+          </div>
+          <div class="btled-panel card" id="uni-resources">
+            <h2>BTLed Resource Library</h2>
+            <p class="tool-desc">DepEd guides, TESDA competencies, LET review, and Pinggang Pinoy</p>
+            <ul class="resource-list" id="resourceList"></ul>
           </div>
         </div>
       </section>
@@ -518,8 +719,33 @@
     </div>
   </div>
 
+  <!-- Export Modal -->
+  <div class="modal-overlay" id="exportModal" aria-hidden="true">
+    <div class="modal">
+      <h2>Export Data</h2>
+      <p class="modal-desc">Choose format and what to export. JSON backup restores everything on another device.</p>
+      <label for="exportScope">Export content</label>
+      <select id="exportScope" class="select-input" style="width:100%;margin:0.5rem 0 1rem">
+        <option value="all">Full StudyHub Data</option>
+        <option value="schedule">Class Schedule</option>
+        <option value="menu">Weekly Menu Plan</option>
+        <option value="notes">Structured Notes</option>
+      </select>
+      <div class="export-format-row">
+        <div class="format-option active" data-format="json"><strong>JSON Backup</strong><span>Restore on any device</span></div>
+        <div class="format-option" data-format="pdf"><strong>PDF</strong><span>Print or save as PDF</span></div>
+        <div class="format-option" data-format="doc"><strong>Document</strong><span>Word-compatible .doc</span></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="exportModalCancel">Cancel</button>
+        <button class="btn btn-primary" id="exportModalConfirm">Export</button>
+      </div>
+    </div>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="app.js"></script>
+  <script src="btled.js"></script>
 </body>
 </html>

@@ -1,7 +1,10 @@
 /* ===== Storage Helpers ===== */
 const STORAGE_KEYS = [
   'theme', 'todos', 'notes', 'progress', 'topics',
-  'sessionHistory', 'vocabPairs', 'pomodoroSessions', 'flashcardDecks', 'aiChatHistory'
+  'sessionHistory', 'vocabPairs', 'pomodoroSessions', 'flashcardDecks', 'aiChatHistory',
+  'scheduleClasses', 'recipeIngredients', 'menuPlanner', 'budgetData',
+  'fabricProject', 'gpaGrades', 'studyScheduler', 'structuredNotes',
+  'mathFormulaCards', 'pomodoroTheme', 'lastSection', 'lastBackupName'
 ];
 
 const store = {
@@ -17,7 +20,7 @@ const store = {
     localStorage.setItem(key, JSON.stringify(value));
   },
   getAll() {
-    const data = { app: 'StudyHub', version: 1, savedAt: new Date().toISOString() };
+    const data = { app: 'BTLed StudyHub', version: 2, savedAt: new Date().toISOString() };
     STORAGE_KEYS.forEach(key => {
       const raw = localStorage.getItem(key);
       if (raw !== null) {
@@ -286,6 +289,7 @@ const Backup = {
         Flashcards.refreshView();
         AIChat.messages = store.get('aiChatHistory', []);
         AIChat.renderMessages();
+        if (typeof BTLed !== 'undefined') BTLed.restoreAll();
         Toast.show('Backup loaded successfully');
       } catch (err) {
         Toast.show(err.message || 'Could not read backup file', 'error');
